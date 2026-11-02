@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block title %}Bosh sahifa{% endblock %}
+{% block content %}
+
+<style>
+    /* Welcome Card */
+    .welcome-card {
+        background: linear-gradient(135deg, #064e3b 0%, #10b981 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .welcome-card::before {
+        content: '🌿';
+        position: absolute;
+        font-size: 200px;
+        right: 20px;
+        top: -50px;
+        opacity: 0.1;
+        transform: rotate(15deg);
+    }
+    .welcome-card h1 {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+    }
+    .welcome-card p {
+        font-size: 16px;
+        opacity: 0.9;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    /* Stat Cards */
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .stat-card {
+        background: var(--bg-card);
+        padding: 28px;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--text-main);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 100%;
+        border-radius: 20px 0 0 20px;
+    }
+    .stat-card.blue::before { background: #3b82f6; }
+    .stat-card.purple::before { background: #8b5cf6; }
+    .stat-card.green::before { background: #10b981; }
+    .stat-card.red::before { background: #ef4444; }
+
+    .stat-icon { font-size: 40px; margin-bottom: 15px; display: block; }
+    .stat-label {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+    }
+    .stat-value {
+        font-size: 42px;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1;
+        margin-bottom: 10px;
+    }
+    .stat-sub {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+        background: var(--bg-card);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .quick-actions h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 14px;
+        text-decoration: none;
+        color: var(--text-main);
+        font-weight: 600;
+        transition: all 0.25s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .action-btn:hover {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: var(--accent-green);
+        transform: translateX(5px);
+        color: #ffffff;
+    }
+    .action-btn .icon { font-size: 28px; }
+    .action-btn .text small {
+        display: block;
+        font-weight: 400;
+        color: var(--text-muted);
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+        .welcome-card { padding: 25px; }
+        .welcome-card h1 { font-size: 24px; }
+        .stat-value { font-size: 32px; }
+    }
+</style>
+
+<!-- Salomlashish kartasi -->
+<div class="welcome-card">
+    <h1>Salom, {{ user.full_name }}! 👋</h1>
+    <p>Bugun — {{ current_month }}. Tizimga xush kelibsiz!</p>
+</div>
+
+<!-- Statistika kartalari -->
+<div class="stat-grid">
+    <a href="/admin/students" class="stat-card blue">
+        <span class="stat-icon">👥</span>
+        <div class="stat-label">O'quvchilar</div>
+        <div class="stat-value">{{ total_students }}</div>
+        <div class="stat-sub">Faol o'quvchilar soni</div>
+    </a>
+
+    <a href="{% if user.role == 'admin' %}/admin/courses{% else %}/teacher/courses{% endif %}" class="stat-card purple">
+        <span class="stat-icon">📚</span>
+        <div class="stat-label">Kurslar</div>
+        <div class="stat-value">{{ total_courses }}</div>
+        <div class="stat-sub">Mavjud kurslar</div>
+    </a>
+
+    <a href="/payments/" class="stat-card green">
+        <span class="stat-icon">💰</span>
+        <div class="stat-label">To'langan</div>
+        <div class="stat-value">{{ paid_count }}</div>
+        <div class="stat-sub">{{ current_month }} oyi</div>
+    </a>
+
+    <a href="/reports/" class="stat-card red">
+        <span class="stat-icon">⚠️</span>
+        <div class="stat-label">Qarzdorlar</div>
+        <div class="stat-value">{{ debt_count }}</div>
+        <div class="stat-sub">{{ current_month }} oyi</div>
+    </a>
+</div>
+
+<!-- Tez amallar -->
+<div class="quick-actions">
+    <h3><span style="color: #fbbf24;">⚡</span> Tez amallar</h3>
+    <div class="action-grid">
+        {% if user.role == "admin" %}
+        <a href="/admin/students/new" class="action-btn">
+            <span class="icon">➕</span>
+            <div class="text">O'quvchi qo'shish<small>Yangi o'quvchi ro'yxati</small></div>
+        </a>
+        {% endif %}
+        <a href="/attendance/" class="action-btn">
+            <span class="icon">📅</span>
+            <div class="text">Davomat belgilash<small>Bugungi davomat</small></div>
+        </a>
+        <a href="/payments/" class="action-btn">
+            <span class="icon">💳</span>
+            <div class="text">To'lov qabul qilish<small>Yangi to'lov kiritish</small></div>
+        </a>
+        <a href="/reports/" class="action-btn">
+            <span class="icon">📊</span>
+            <div class="text">Hisobot<small>Excel yuklab olish</small></div>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

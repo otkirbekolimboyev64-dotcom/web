@@ -1,0 +1,18 @@
+# Virtual muhit
+venv/
+env/
+
+# Maxfiy ma'lumotlar
+.env
+
+# Ma'lumotlar bazasi
+*.db
+*.sqlite3
+
+# Python keshi
+__pycache__/
+*.pyc
+*.pyo
+
+# Tizim fayllari
+.DS_Store

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}O'qituvchilar{% endblock %}
+{% block content %}
+<h2>👨‍🏫 O'qituvchilar</h2>
+<div class="row mt-3">
+    <div class="col-md-4"><div class="card">
+        <div class="card-header bg-primary text-white">Yangi o'qituvchi</div>
+        <div class="card-body">
+            <form method="post" action="/admin/teachers/new">
+                <div class="mb-2"><label class="form-label">Login</label>
+                    <input type="text" name="username" class="form-control" required></div>
+                <div class="mb-2"><label class="form-label">Parol</label>
+                    <input type="text" name="password" class="form-control" required></div>
+                <div class="mb-2"><label class="form-label">F.I.Sh</label>
+                    <input type="text" name="full_name" class="form-control" required></div>
+                <div class="mb-2"><label class="form-label">Telefon</label>
+                    <input type="text" name="phone" class="form-control"></div>
+                <button class="btn btn-primary w-100">Qo'shish</button>
+            </form>
+        </div>
+    </div></div>
+    <div class="col-md-8"><div class="card"><div class="card-body">
+        <table class="table">
+            <thead><tr><th>#</th><th>Login</th><th>F.I.Sh</th><th>Tel</th><th></th></tr></thead>
+            <tbody>
+            {% for t in teachers %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ t.username }}</td>
+                <td>{{ t.full_name }}</td>
+                <td>{{ t.phone or '—' }}</td>
+                <td>
+                    <form method="post" action="/admin/teachers/{{ t.id }}/delete"
+                          onsubmit="return confirm('O\'chirish?')">
+                        <button class="btn btn-sm btn-danger">🗑</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center text-muted">O'qituvchi yo'q</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div></div></div>
+</div>
+{% endblock %}

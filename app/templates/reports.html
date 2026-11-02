@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Hisobotlar{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📊 Oylik hisobot — {{ current_month }}</h2>
+    <a href="/reports/excel?month={{ current_month }}" class="btn btn-success">
+        ⬇️ Excel yuklab olish
+    </a>
+</div>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3"><label class="form-label">Oy (YYYY-MM)</label>
+        <input type="text" name="month" class="form-control" value="{{ current_month }}"></div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100">Ko'rish</button></div>
+</form>
+<div class="card"><div class="card-body">
+    <table class="table table-sm">
+        <thead><tr>
+            <th>#</th><th>O'quvchi</th><th>Kurs</th>
+            <th>To'langan</th><th>Qarz</th><th>Davomat</th><th>Holat</th>
+        </tr></thead>
+        <tbody>
+        {% for r in report %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ r.student.full_name }}</td>
+                <td>{{ r.student.course.name if r.student.course else '-' }}</td>
+                <td>{{ "{:,.0f}".format(r.total_paid) }}</td>
+                <td class="{{ 'text-danger fw-bold' if r.debt > 0 else '' }}">
+                    {{ "{:,.0f}".format(r.debt) }}
+                </td>
+                <td>{{ r.attendance_pct }}% ({{ r.present_days }}/{{ r.total_days }})</td>
+                <td>
+                    {% if r.status == 'paid' %}<span class="badge bg-success">To'langan</span>
+                    {% elif r.status == 'partial' %}<span class="badge bg-warning">Qismiy</span>
+                    {% else %}<span class="badge bg-danger">Qarzdor</span>{% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="7" class="text-center text-muted">Ma'lumot yo'q</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div></div>
+{% endblock %}

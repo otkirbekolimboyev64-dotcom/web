@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}O'quvchilar{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+    <h2>👥 O'quvchilar</h2>
+    <a href="/admin/students/new" class="btn btn-primary">+ Yangi o'quvchi</a>
+</div>
+<div class="card"><div class="card-body">
+    <table class="table table-hover">
+        <thead><tr>
+            <th>#</th><th>F.I.Sh</th><th>Kurs</th>
+            <th>Guruh</th><th>To'lov</th><th>Telegram ID</th><th></th>
+        </tr></thead>
+        <tbody>
+        {% for s in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.full_name }}</td>
+                <td>{{ s.course.name if s.course else '-' }}</td>
+                <td>{{ s.group_name or '-' }}</td>
+                <td>{{ "{:,.0f}".format(s.monthly_fee) }} so'm</td>
+                <td><small>{{ s.telegram_id or '—' }}</small></td>
+                <td>
+                    <a href="/admin/students/{{ s.id }}/edit" class="btn btn-sm btn-warning">✏️</a>
+                    <form method="post" action="/admin/students/{{ s.id }}/delete"
+                          style="display:inline" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
+                        <button class="btn btn-sm btn-danger">🗑</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="7" class="text-center text-muted">O'quvchi yo'q</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div></div>
+{% endblock %}

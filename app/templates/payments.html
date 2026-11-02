@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}To'lovlar{% endblock %}
+{% block content %}
+<h2>💰 To'lovlar — {{ current_month }}</h2>
+<div class="row mt-3">
+    <div class="col-md-4"><div class="card">
+        <div class="card-header bg-success text-white">Yangi to'lov</div>
+        <div class="card-body">
+            <form method="post" action="/payments/new">
+                <div class="mb-2"><label class="form-label">O'quvchi</label>
+                    <select name="student_id" class="form-select" required>
+                        <option value="">Tanlang...</option>
+                        {% for s in students %}
+                        <option value="{{ s.id }}">{{ s.full_name }}</option>
+                        {% endfor %}
+                    </select></div>
+                <div class="mb-2"><label class="form-label">Summa (so'm)</label>
+                    <input type="number" name="amount" class="form-control" required></div>
+                <div class="mb-2"><label class="form-label">Oy (YYYY-MM)</label>
+                    <input type="text" name="month" class="form-control"
+                           value="{{ current_month }}" required></div>
+                <div class="mb-2"><label class="form-label">Holat</label>
+                    <select name="status" class="form-select">
+                        <option value="paid">To'langan</option>
+                        <option value="partial">Qismiy</option>
+                        <option value="debt">Qarz</option>
+                    </select></div>
+                <div class="mb-2"><label class="form-label">Izoh</label>
+                    <input type="text" name="note" class="form-control"></div>
+                <button class="btn btn-success w-100">Qo'shish</button>
+            </form>
+        </div>
+    </div></div>
+    <div class="col-md-8"><div class="card">
+        <div class="card-header">Bu oy to'lovlari</div>
+        <div class="card-body">
+            <table class="table table-sm">
+                <thead><tr>
+                    <th>#</th><th>O'quvchi</th><th>Summa</th>
+                    <th>Oy</th><th>Holat</th><th>Sana</th><th></th>
+                </tr></thead>
+                <tbody>
+                {% for p in payments %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ p.student.full_name }}</td>
+                    <td>{{ "{:,.0f}".format(p.amount) }}</td>
+                    <td>{{ p.month }}</td>
+                    <td>
+                        {% if p.status == 'paid' %}<span class="badge bg-success">To'langan</span>
+                        {% elif p.status == 'partial' %}<span class="badge bg-warning">Qismiy</span>
+                        {% else %}<span class="badge bg-danger">Qarz</span>{% endif %}
+                    </td>
+                    <td>{{ p.paid_at.strftime('%d.%m.%Y') }}</td>
+                    <td>
+                        <form method="post" action="/payments/{{ p.id }}/delete"
+                              onsubmit="return confirm('O\'chirish?')">
+                            <button class="btn btn-sm btn-danger">🗑</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center text-muted">To'lov yo'q</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div></div>
+</div>
+{% endblock %}

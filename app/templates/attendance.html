@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Davomat{% endblock %}
+{% block content %}
+<h2>📅 Davomat — {{ selected_date }}</h2>
+<form method="get" class="row g-2 mt-2 mb-3">
+    <div class="col-md-3"><label class="form-label">Sana</label>
+        <input type="date" name="date_str" class="form-control" value="{{ selected_date }}"></div>
+    <div class="col-md-3"><label class="form-label">Kurs</label>
+        <select name="course_id" class="form-select">
+            <option value="">Barchasi</option>
+            {% for c in courses %}
+            <option value="{{ c.id }}" {{ 'selected' if selected_course == c.id else '' }}>
+                {{ c.name }}
+            </option>
+            {% endfor %}
+        </select></div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100">Ko'rish</button></div>
+</form>
+<form method="post" action="/attendance/mark">
+    <input type="hidden" name="date_str" value="{{ selected_date }}">
+    <div class="card"><div class="card-body">
+        <table class="table align-middle">
+            <thead><tr>
+                <th>#</th><th>O'quvchi</th><th>Kurs</th><th>Guruh</th><th>Holat</th>
+            </tr></thead>
+            <tbody>
+            {% for s in students %}
+                {% set cur = attendance_map.get(s.id, '') %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ s.full_name }}</td>
+                    <td>{{ s.course.name if s.course else '-' }}</td>
+                    <td>{{ s.group_name or '-' }}</td>
+                    <td>
+                        <select name="status_{{ s.id }}" class="form-select form-select-sm">
+                            <option value="" {{ 'selected' if not cur else '' }}>—</option>
+                            <option value="present" {{ 'selected' if cur == 'present' else '' }}>✅ Keldi</option>
+                            <option value="absent"  {{ 'selected' if cur == 'absent'  else '' }}>❌ Kelmadi</option>
+                            <option value="late"    {{ 'selected' if cur == 'late'    else '' }}>⏰ Kechikdi</option>
+                            <option value="excused" {{ 'selected' if cur == 'excused' else '' }}>📝 Sababli</option>
+                        </select>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center text-muted">O'quvchi yo'q</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if students %}
+        <button class="btn btn-success">💾 Saqlash</button>
+        {% endif %}
+    </div></div>
+</form>
+{% endblock %}
