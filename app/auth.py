@@ -1,29 +1,32 @@
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from fastapi import Request, HTTPException
-from passlib.context import CryptContext
+import bcrypt
 from app.database import SessionLocal
 from app.models import User
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY", "super-secret-key-almashtiring-buni")
 serializer = URLSafeTimedSerializer(SECRET_KEY)
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
+    pwd_bytes = password.encode("utf-8")
+    if len(pwd_bytes) > 72:
+        pwd_bytes = pwd_bytes[:72]
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pwd_bytes, salt).decode("utf-8")
 
 def verify_password(plain: str, hashed: str) -> bool:
     try:
-        return pwd_context.verify(plain, hashed)
+        pwd_bytes = plain.encode("utf-8")
+        if len(pwd_bytes) > 72:
+            pwd_bytes = pwd_bytes[:72]
+        hash_bytes = hashed.encode("utf-8")
+        return bcrypt.checkpw(pwd_bytes, hash_bytes)
     except Exception:
         return plain == hashed
 
-
 def create_session(user_id: int) -> str:
     return serializer.dumps({"user_id": user_id})
-
 
 def get_current_user(request: Request):
     token = request.cookies.get("session")
@@ -39,7 +42,6 @@ def get_current_user(request: Request):
     finally:
         db.close()
     return user
-
 
 def require_user(request: Request):
     user = get_current_user(request)
