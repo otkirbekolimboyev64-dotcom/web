@@ -15,7 +15,7 @@ def _admin_only(request: Request):
         return None
     return user
 
-# --- GURUHLAR (YANGI) ---
+# --- GURUHLAR ---
 @router.get("/groups", response_class=HTMLResponse)
 def groups_list(request: Request, db: Session = Depends(get_db)):
     user = _admin_only(request)
@@ -64,10 +64,13 @@ def student_create(
     telegram_id: str = Form(""), db: Session = Depends(get_db),
 ):
     if not _admin_only(request): return RedirectResponse("/login", status_code=302)
-    db.add(Student(
+    
+    # O'quvchi yaratish
+    new_student = Student(
         full_name=full_name, phone=phone, parent_phone=parent_phone, parent_name=parent_name,
         group_id=group_id, monthly_fee=monthly_fee, telegram_id=telegram_id or None,
-    ))
+    )
+    db.add(new_student)
     db.commit()
     return RedirectResponse("/admin/students", status_code=302)
 
