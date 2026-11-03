@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Guruhlar{% endblock %}
+{% block content %}
+<h2>👥 Guruhlar</h2>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card"><div class="card-header bg-primary text-white">Yangi guruh</div>
+        <div class="card-body">
+            <form method="post" action="/admin/groups/new">
+                <div class="mb-2"><label class="form-label">Guruh nomi</label>
+                    <input type="text" name="name" class="form-control" required placeholder="Masalan: A-1"></div>
+                <div class="mb-2"><label class="form-label">Kurs</label>
+                    <select name="course_id" class="form-select" required>
+                        {% for c in courses %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                    </select></div>
+                <div class="mb-2"><label class="form-label">O'qituvchi</label>
+                    <select name="teacher_id" class="form-select">
+                        <option value="">—</option>
+                        {% for t in teachers %}<option value="{{ t.id }}">{{ t.full_name }}</option>{% endfor %}
+                    </select></div>
+                <button class="btn btn-primary w-100">Yaratish</button>
+            </form>
+        </div></div>
+    </div>
+    <div class="col-md-8"><div class="card"><div class="card-body">
+        <table class="table">
+            <thead><tr><th>#</th><th>Guruh</th><th>Kurs</th><th>O'qituvchi</th></tr></thead>
+            <tbody>
+            {% for g in groups %}
+            <tr><td>{{ loop.index }}</td><td>{{ g.name }}</td><td>{{ g.course.name }}</td><td>{{ g.teacher.full_name if g.teacher else '—' }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div></div></div>
+</div>
+{% endblock %}

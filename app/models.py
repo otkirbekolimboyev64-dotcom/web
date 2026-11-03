@@ -13,7 +13,7 @@ class User(Base):
     username = Column(String(50), unique=True, nullable=False)
     password = Column(String(200), nullable=False)
     full_name = Column(String(150), nullable=False)
-    role = Column(String(20), nullable=False)
+    role = Column(String(20), nullable=False)  # admin, teacher
     phone = Column(String(20), nullable=True)
     telegram_id = Column(String(50), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -25,10 +25,20 @@ class Course(Base):
     name = Column(String(100), nullable=False)
     price = Column(Float, nullable=False)
     duration_months = Column(Integer, default=1)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    groups = relationship("Group", back_populates="course")
+
+class Group(Base):
+    __tablename__ = "groups"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False) # Masalan: Ingliz tili A-1
+    course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
     teacher_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    course = relationship("Course", back_populates="groups")
     teacher = relationship("User")
-    students = relationship("Student", back_populates="course")
+    students = relationship("Student", back_populates="group")
 
 
 class Student(Base):
@@ -38,13 +48,13 @@ class Student(Base):
     phone = Column(String(20), nullable=True)
     parent_phone = Column(String(20), nullable=False)
     parent_name = Column(String(150), nullable=True)
-    course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
-    group_name = Column(String(50), nullable=True)
+    group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
     monthly_fee = Column(Float, nullable=False)
     telegram_id = Column(String(50), nullable=True, index=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
-    course = relationship("Course", back_populates="students")
+
+    group = relationship("Group", back_populates="students")
     payments = relationship("Payment", back_populates="student", cascade="all, delete-orphan")
     attendances = relationship("Attendance", back_populates="student", cascade="all, delete-orphan")
     grades = relationship("Grade", back_populates="student", cascade="all, delete-orphan")

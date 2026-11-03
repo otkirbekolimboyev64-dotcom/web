@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Mening guruhlarim</h2>
+<div class="row mt-4">
+    {% for g in groups %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4>{{ g.name }}</h4>
+                <p class="text-muted">{{ g.course.name }}</p>
+                <a href="/teacher/group/{{ g.id }}" class="btn btn-success w-100">Davomat olish</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12"><div class="alert alert-info">Sizga hali guruh biriktirilmagan.</div></div>
+    {% endfor %}
+</div>
+{% endblock %}
