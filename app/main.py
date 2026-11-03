@@ -1,4 +1,15 @@
-import os
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse("/login", status_code=302)
+    
+    # 🟢 YANGI QO'SHILGAN QATOR: Agar o'qituvchi bo'lsa, o'z guruhlariga o'tkazamiz
+    if user.role == "teacher":
+        return RedirectResponse("/teacher/dashboard", status_code=302)
+
+    total_students = db.query(Student).filter(Student.is_active == True).count()
+    # ... qolgan kod o'zgarmaydi ...import os
 from fastapi import FastAPI, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
