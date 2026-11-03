@@ -42,16 +42,24 @@
             color: var(--accent-blue) !important;
             font-weight: 700;
         }
-        .table { color: var(--text-main) !important; }
+        
+        /* 🔥 Jadvalni to'liq qorong'u qilish (Yozuvlar ko'rinishi uchun) */
+        .table { color: var(--text-main) !important; margin-bottom: 0; }
         .table th { 
             background-color: #0d1b2a !important; 
             color: var(--accent-green) !important; 
             border-color: var(--border-color) !important;
         }
         .table td { 
-            border-color: var(--border-color) !important; 
+            background-color: var(--bg-card) !important; /* Oq fonni yo'q qilish */
             color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
         }
+        .table-hover tbody tr:hover td {
+            background-color: #1a365d !important;
+            color: white !important;
+        }
+
         .form-control, .form-select {
             background-color: var(--bg-input) !important;
             border: 1px solid var(--border-color) !important;
@@ -73,6 +81,9 @@
             color: var(--text-main) !important;
             border-color: var(--border-color) !important;
         }
+        
+        /* Bosh sahifa (Dashboard) kartalaridagi raqamlar oq bo'lishi uchun */
+        .stat-value { color: #ffffff !important; }
     </style>
 </head>
 <body>
