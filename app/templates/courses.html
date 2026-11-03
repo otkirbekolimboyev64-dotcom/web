@@ -2,42 +2,33 @@
 {% block title %}Kurslar{% endblock %}
 {% block content %}
 <h2>📚 Kurslar</h2>
-{% if not readonly %}
 <div class="row mt-3">
-    <div class="col-md-4"><div class="card">
-        <div class="card-header bg-primary text-white">Yangi kurs</div>
+    <div class="col-md-4">
+        <div class="card"><div class="card-header bg-primary text-white">Yangi kurs</div>
         <div class="card-body">
             <form method="post" action="/admin/courses/new">
-                <div class="mb-2"><label class="form-label">Nomi</label>
-                    <input type="text" name="name" class="form-control" required></div>
+                <div class="mb-2"><label class="form-label">Kurs nomi</label>
+                    <input type="text" name="name" class="form-control" required placeholder="Masalan: Ingliz tili"></div>
                 <div class="mb-2"><label class="form-label">Narxi (so'm)</label>
                     <input type="number" name="price" class="form-control" required></div>
                 <div class="mb-2"><label class="form-label">Davomiyligi (oy)</label>
                     <input type="number" name="duration_months" class="form-control" value="1"></div>
-                <div class="mb-2"><label class="form-label">O'qituvchi</label>
-                    <select name="teacher_id" class="form-select">
-                        <option value="">—</option>
-                        {% for t in teachers %}
-                        <option value="{{ t.id }}">{{ t.full_name }}</option>
-                        {% endfor %}
-                    </select></div>
                 <button class="btn btn-primary w-100">Qo'shish</button>
             </form>
-        </div>
-    </div></div>
+        </div></div>
+    </div>
     <div class="col-md-8"><div class="card"><div class="card-body">
         <table class="table">
-            <thead><tr><th>#</th><th>Nomi</th><th>Narxi</th><th>O'qituvchi</th><th></th></tr></thead>
+            <thead><tr><th>#</th><th>Nomi</th><th>Narxi</th><th>Davomiyligi</th><th></th></tr></thead>
             <tbody>
             {% for c in courses %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ c.name }}</td>
                 <td>{{ "{:,.0f}".format(c.price) }} so'm</td>
-                <td>{{ c.teacher.full_name if c.teacher else '—' }}</td>
+                <td>{{ c.duration_months }} oy</td>
                 <td>
-                    <form method="post" action="/admin/courses/{{ c.id }}/delete"
-                          onsubmit="return confirm('O\'chirish?')">
+                    <form method="post" action="/admin/courses/{{ c.id }}/delete" onsubmit="return confirm('O\'chirish?')">
                         <button class="btn btn-sm btn-danger">🗑</button>
                     </form>
                 </td>
@@ -49,23 +40,4 @@
         </table>
     </div></div></div>
 </div>
-{% else %}
-<div class="card mt-3"><div class="card-body">
-    <table class="table">
-        <thead><tr><th>#</th><th>Nomi</th><th>Narxi</th><th>Davomiyligi</th></tr></thead>
-        <tbody>
-        {% for c in courses %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ c.name }}</td>
-            <td>{{ "{:,.0f}".format(c.price) }} so'm</td>
-            <td>{{ c.duration_months }} oy</td>
-        </tr>
-        {% else %}
-        <tr><td colspan="4" class="text-center text-muted">Kurs biriktirilmagan</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div></div>
-{% endif %}
 {% endblock %}
