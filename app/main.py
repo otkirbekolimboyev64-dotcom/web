@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from app.database import engine, Base, get_db, SessionLocal
 from app.models import User, Student, Course, Payment
 from app.auth import create_session, get_current_user, hash_password, verify_password
-from app.routers import admin, teacher, payments, attendance, reports
+from app.routers import admin, teacher, payments, attendance, reports, finance
 
 load_dotenv()
 Base.metadata.create_all(bind=engine)
@@ -42,6 +42,7 @@ app.include_router(teacher.router, prefix="/teacher", tags=["teacher"])
 app.include_router(payments.router, prefix="/payments", tags=["payments"])
 app.include_router(attendance.router, prefix="/attendance", tags=["attendance"])
 app.include_router(reports.router, prefix="/reports", tags=["reports"])
+app.include_router(finance.router, prefix="/finance", tags=["finance"])
 
 
 @app.get("/login", response_class=HTMLResponse)
