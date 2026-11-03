@@ -1,5 +1,91 @@
-body { background-color: #f8f9fa; }
-.card { box-shadow: 0 2px 4px rgba(0,0,0,0.08); border: none; margin-bottom: 1rem; }
-.navbar-brand { font-weight: bold; font-size: 1.2rem; }
-.table th { background-color: #f1f3f5; }
-.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.85rem; }
+/* 🌙 GLOBAL DARK MOON THEME */
+:root {
+    --bg-dark: #0a192f;          /* To'q ko'k fon */
+    --bg-card: #112240;          /* Karta foni */
+    --bg-input: #1d2d50;         /* Input foni */
+    --text-main: #e6f1ff;        /* Asosiy matn */
+    --text-muted: #8892b0;       /* Kulrang matn */
+    --accent-green: #10b981;     /* Yashil tugmalar */
+    --accent-blue: #3b82f6;      /* Ko'k tugmalar */
+    --border-color: #233554;     /* Chegaralar */
+}
+
+body { 
+    background-color: var(--bg-dark) !important; 
+    color: var(--text-main) !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar { 
+    background: linear-gradient(135deg, #1a365d 0%, #0f172a 100%) !important; 
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+.navbar-brand, .nav-link { color: var(--text-main) !important; }
+.nav-link:hover { color: var(--accent-green) !important; }
+
+/* Kartalar (Card) */
+.card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+    border-radius: 12px !important;
+    color: var(--text-main);
+}
+.card-header {
+    background-color: #0d1b2a !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--accent-blue) !important;
+    font-weight: 700;
+}
+
+/* Jadval (Table) */
+.table { color: var(--text-main) !important; }
+.table th { 
+    background-color: #0d1b2a !important; 
+    color: var(--accent-green) !important; 
+    border-color: var(--border-color) !important;
+}
+.table td { 
+    border-color: var(--border-color) !important; 
+    color: var(--text-main) !important;
+    background-color: transparent !important;
+}
+.table-hover tbody tr:hover td { 
+    background-color: #1a365d !important; 
+    color: white !important;
+}
+
+/* Formalar (Input, Select) */
+.form-control, .form-select {
+    background-color: var(--bg-input) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-input) !important;
+    border-color: var(--accent-blue) !important;
+    color: white !important;
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25) !important;
+}
+.form-label { color: var(--text-muted) !important; }
+
+/* Tugmalar (Buttons) */
+.btn-primary { background-color: var(--accent-blue) !important; border: none !important; }
+.btn-success { background-color: var(--accent-green) !important; border: none !important; }
+.btn-danger { background-color: #ef4444 !important; border: none !important; }
+.btn-warning { background-color: #f59e0b !important; border: none !important; color: white !important; }
+
+/* Salomlashish kartasi */
+.welcome-card {
+    background: linear-gradient(135deg, #0f2e26 0%, #10b981 100%) !important;
+    border: 1px solid #10b981 !important;
+}
+
+/* Ro'yxat (List group) */
+.list-group-item {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
