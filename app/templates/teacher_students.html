@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Mening o'quvchilarim{% endblock %}
+{% block content %}
+<h2 class="mb-4">👨‍🎓 Mening o'quvchilarim</h2>
+<div class="card"><div class="card-body">
+    <table class="table table-hover">
+        <thead><tr>
+            <th>#</th><th>F.I.Sh</th><th>Guruh</th><th>Ota-ona tel</th>
+        </tr></thead>
+        <tbody>
+        {% for s in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.full_name }}</td>
+                <td>{{ s.group.name if s.group else '-' }}</td>
+                <td>{{ s.parent_phone }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4" class="text-center text-muted">Sizga biriktirilgan guruhlarda o'quvchilar yo'q</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div></div>
+{% endblock %}

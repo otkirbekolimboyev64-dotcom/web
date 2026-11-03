@@ -19,12 +19,26 @@ def teacher_dashboard(request: Request, db: Session = Depends(get_db)):
         "request": request, "user": user, "groups": groups,
     })
 
+# YANGI: O'qituvchi o'z o'quvchilarini ko'radi
+@router.get("/students", response_class=HTMLResponse)
+def teacher_students(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request)
+    if not user or user.role != "teacher": return RedirectResponse("/login", status_code=302)
+    
+    # Faqat o'z guruhlaridagi o'quvchilarni oladi
+    my_groups = db.query(Group).filter(Group.teacher_id == user.id).all()
+    group_ids = [g.id for g in my_groups]
+    students = db.query(Student).filter(Student.group_id.in_(group_ids)).all()
+    
+    return templates.TemplateResponse("teacher_students.html", {
+        "request": request, "user": user, "students": students,
+    })
+
 @router.get("/group/{group_id}", response_class=HTMLResponse)
 def teacher_group_attendance(group_id: int, request: Request, date_str: str = None, db: Session = Depends(get_db)):
     user = get_current_user(request)
     if not user or user.role != "teacher": return RedirectResponse("/login", status_code=302)
     
-    # Faqat o'z guruhini ko'ra oladi
     group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == user.id).first()
     if not group: return RedirectResponse("/teacher/dashboard", status_code=302)
     

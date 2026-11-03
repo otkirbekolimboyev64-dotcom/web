@@ -20,16 +20,19 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 {% if user.role == "admin" %}
+                    <!-- ADMIN UCHUN HAMMA NARSA -->
                     <li class="nav-item"><a class="nav-link" href="/dashboard">Bosh sahifa</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/groups">Guruhlar</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/students">O'quvchilar</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/courses">Kurslar</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/teachers">O'qituvchilar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/finance/">Moliya</a></li>
                     <li class="nav-item"><a class="nav-link" href="/payments/">To'lovlar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/finance/">Moliya</a></li>/
                     <li class="nav-item"><a class="nav-link" href="/reports/">Hisobotlar</a></li>
                 {% else %}
+                    <!-- O'QITUVCHI UCHUN FAQAT KERAKLILARI -->
                     <li class="nav-item"><a class="nav-link" href="/teacher/dashboard">Mening guruhlarim</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/teacher/students">Mening o'quvchilarim</a></li>
                 {% endif %}
             </ul>
             <span class="navbar-text me-3 text-white">{{ user.full_name }} ({{ user.role }})</span>
