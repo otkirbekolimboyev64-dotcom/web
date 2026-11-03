@@ -13,7 +13,14 @@ from app.auth import create_session, get_current_user, hash_password, verify_pas
 from app.routers import admin, teacher, payments, attendance, reports, finance
 
 load_dotenv()
-Base.metadata.create_all(bind=engine)
+
+# ====================================================================
+# 🟢 MUHIM: Baza avtomatik tozalanadi va yangilanadi (xatosiz ishlash uchun)
+# ====================================================================
+if os.getenv("DATABASE_URL", "").startswith("postgres"):
+    Base.metadata.drop_all(bind=engine) # Eski xato jadvallarni o'chiradi
+Base.metadata.create_all(bind=engine)  # Yangi toza jadvallarni yaratadi
+# ====================================================================
 
 def create_default_admin():
     db = SessionLocal()
@@ -81,7 +88,6 @@ def dashboard(request: Request, db: Session = Depends(get_db)):
     if not user:
         return RedirectResponse("/login", status_code=302)
     
-    # O'qituvchi kirsa, avtomatik o'z guruhlariga yo'naltiriladi
     if user.role == "teacher":
         return RedirectResponse("/teacher/dashboard", status_code=302)
 
