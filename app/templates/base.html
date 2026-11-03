@@ -16,22 +16,22 @@
 {% if user %}
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard">📚 Karakul School</a>
+        <a class="navbar-brand" href="{% if user.role == 'admin' %}/dashboard{% else %}/teacher/dashboard{% endif %}">📚 Karakul School</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="/dashboard">Bosh sahifa</a></li>
                 {% if user.role == "admin" %}
-                <li class="nav-item"><a class="nav-link" href="/admin/groups">Guruhlar</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/students">O'quvchilar</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/courses">Kurslar</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/teachers">O'qituvchilar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Bosh sahifa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/groups">Guruhlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/students">O'quvchilar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/courses">Kurslar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/teachers">O'qituvchilar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/payments/">To'lovlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/reports/">Hisobotlar</a></li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link" href="/teacher/dashboard">Mening guruhlarim</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/teacher/dashboard">Mening guruhlarim</a></li>
                 {% endif %}
-                <li class="nav-item"><a class="nav-link" href="/payments/">To'lovlar</a></li>
-                <li class="nav-item"><a class="nav-link" href="/reports/">Hisobotlar</a></li>
             </ul>
-            <span class="navbar-text me-3 text-white">{{ user.full_name }}</span>
+            <span class="navbar-text me-3 text-white">{{ user.full_name }} ({{ user.role }})</span>
             <a class="btn btn-outline-light btn-sm" href="/logout">Chiqish</a>
         </div>
     </div>

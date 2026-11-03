@@ -14,7 +14,6 @@ templates = Jinja2Templates(directory="app/templates")
 def teacher_dashboard(request: Request, db: Session = Depends(get_db)):
     user = get_current_user(request)
     if not user or user.role != "teacher": return RedirectResponse("/login", status_code=302)
-    # Faqat o'ziga biriktirilgan guruhlarni oladi
     groups = db.query(Group).filter(Group.teacher_id == user.id).all()
     return templates.TemplateResponse("teacher_dashboard.html", {
         "request": request, "user": user, "groups": groups,
@@ -25,6 +24,7 @@ def teacher_group_attendance(group_id: int, request: Request, date_str: str = No
     user = get_current_user(request)
     if not user or user.role != "teacher": return RedirectResponse("/login", status_code=302)
     
+    # Faqat o'z guruhini ko'ra oladi
     group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == user.id).first()
     if not group: return RedirectResponse("/teacher/dashboard", status_code=302)
     
@@ -44,6 +44,9 @@ async def teacher_mark_attendance(group_id: int, request: Request, db: Session =
     user = get_current_user(request)
     if not user or user.role != "teacher": return RedirectResponse("/login", status_code=302)
     
+    group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == user.id).first()
+    if not group: return RedirectResponse("/teacher/dashboard", status_code=302)
+
     form = await request.form()
     target_date = form.get("date_str") or date.today().isoformat()
     

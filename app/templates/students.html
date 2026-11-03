@@ -8,16 +8,15 @@
 <div class="card"><div class="card-body">
     <table class="table table-hover">
         <thead><tr>
-            <th>#</th><th>F.I.Sh</th><th>Kurs</th>
-            <th>Guruh</th><th>To'lov</th><th>Telegram ID</th><th></th>
+            <th>#</th><th>F.I.Sh</th><th>Guruh</th>
+            <th>Oylik to'lov</th><th>Telegram ID</th><th></th>
         </tr></thead>
         <tbody>
         {% for s in students %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ s.full_name }}</td>
-                <td>{{ s.course.name if s.course else '-' }}</td>
-                <td>{{ s.group_name or '-' }}</td>
+                <td>{{ s.group.name if s.group else '-' }}</td>
                 <td>{{ "{:,.0f}".format(s.monthly_fee) }} so'm</td>
                 <td><small>{{ s.telegram_id or '—' }}</small></td>
                 <td>
@@ -29,7 +28,7 @@
                 </td>
             </tr>
         {% else %}
-            <tr><td colspan="7" class="text-center text-muted">O'quvchi yo'q</td></tr>
+            <tr><td colspan="6" class="text-center text-muted">O'quvchi yo'q</td></tr>
         {% endfor %}
         </tbody>
     </table>
